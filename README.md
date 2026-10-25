@@ -41,7 +41,7 @@ Proyek ini menggunakan dataset **Telco Customer Churn** untuk mengeksplorasi kar
 | Notebook | `notebook/churn_analysis.ipynb` — Cleaning, EDA, Engineer, dan eksperimen model |
 | Dataset lokal | `data/Churn_Customer_telco.zip` |
 | Model yang diuji | Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting |
-| Hasil sementara | HistGradientBoosting, threshold 0,37: recall 0,877 dan precision 0,461 pada test set |
+| Hasil notebook final | Gradient Boosting, threshold 0,37: recall 0,877 dan precision 0,461 pada test set |
 | Deployment | Belum termasuk dalam proyek saat ini |
 
 ---
@@ -141,9 +141,9 @@ flowchart TD
     J --> K["Bandingkan kandidat model<br/>cross-validation"]
     K --> L["Evaluasi metrik kelas churn"]
     L --> M["Pilih threshold dari<br/>prediksi out-of-fold train"]
-    M --> N["Evaluasi satu kali<br/>pada test set"]
-    N -. "Tahap berikutnya" .-> O["Biaya bisnis · top-k<br/>resampling · fitur tambahan"]
-    O -.-> P["Validasi data/periode baru<br/>dan uji strategi retensi"]
+    M --> N["Evaluasi pada test set"]
+    N -. "Tahap berikutnya" .-> O["Skenario biaya · top-k<br/>SMOTE · fitur interaksi"]
+    O -.-> P["Generalisasi terbatas<br/>ke satu potret waktu"]
     classDef done fill:#e7f5e9,stroke:#2e7d32,color:#183b20
     classDef next fill:#fff4e5,stroke:#b26a00,color:#633b00
     class A,B,C,D,E,F,G,H,I,J,K,L,M,N done
@@ -168,8 +168,8 @@ flowchart LR
     OOF --> TESTEVAL["Terapkan threshold terpilih<br/>dan evaluasi final"]
     FIT --> TESTEVAL
     TEST --> TESTEVAL
-    TESTEVAL -.-> FUTURE["Biaya bisnis · top-k<br/>resampling · fitur tambahan"]
-    FUTURE -.-> NEWDATA["Validasi pada data/periode baru"]
+    TESTEVAL -.-> FUTURE["Skenario biaya · top-k<br/>SMOTE · Contract × InternetService"]
+    FUTURE -.-> NEWDATA["Data hanya satu potret waktu;<br/>periode baru belum tersedia"]
 ```
 
 ---
@@ -355,7 +355,7 @@ Notebook membandingkan Logistic Regression, KNN, Decision Tree, Random Forest, d
 
 HistGradientBoosting memiliki PR-AUC CV tertinggi di antara kandidat model baru, tetapi nilainya hampir sama dengan Logistic Regression. Perbedaan ini kecil; pemilihan akhir perlu mempertimbangkan kompleksitas, biaya kesalahan, dan validasi lebih lanjut.
 
-### 11.4 Hasil evaluasi sementara
+### 11.4 Hasil evaluasi model pada test set
 
 | Model / threshold | Precision | Recall | F1 | PR-AUC | Churn terlewat (FN) | Non-churn salah ditandai (FP) |
 |---|---:|---:|---:|---:|---:|---:|
@@ -363,9 +363,9 @@ HistGradientBoosting memiliki PR-AUC CV tertinggi di antara kandidat model baru,
 | HistGradientBoosting, 0,50 | 0,513 | 0,821 | 0,632 | 0,663 | 67 | 291 |
 | HistGradientBoosting, 0,37 | 0,461 | 0,877 | 0,604 | 0,663 | 46 | 384 |
 
-Threshold 0,37 dipilih dengan memaksimalkan F2 pada probabilitas out-of-fold di data train, lalu diterapkan satu kali pada test set. Hasilnya mengurangi churn yang terlewat dibanding baseline, tetapi menandai lebih banyak pelanggan yang sebenarnya tidak churn. Pada test set dengan 374 pelanggan churn, model tersebut melewatkan 46 pelanggan.
+Threshold 0,37 dipilih dengan memaksimalkan F2 pada probabilitas out-of-fold di data train, lalu diterapkan pada test set. Dari 374 pelanggan churn di test set, model melewatkan 46; sebagai trade-off, 384 pelanggan yang tidak churn ikut ditandai. PR-AUC cross-validation Gradient Boosting (0,665) hampir sama dengan Logistic Regression baseline (0,666), sehingga belum ada satu model yang jelas unggul.
 
-**Keterbatasan evaluasi:** test set tidak digunakan untuk memilih threshold; notebook memilih threshold dari prediksi out-of-fold pada data train dan menggunakan test set untuk evaluasi akhir. Namun, threshold F2 memakai bobot asumsi (recall dua kali precision), bukan biaya retensi aktual. Evaluasi ini juga hanya mencakup satu pembagian data historis, sehingga performa dan threshold perlu diuji pada periode/data baru sebelum digunakan secara operasional.
+**Keterbatasan evaluasi:** test set tidak digunakan untuk memilih threshold; notebook memilih threshold dari prediksi out-of-fold pada data train dan menggunakannya untuk evaluasi. Namun, threshold F2 memakai asumsi recall dua kali lebih penting daripada precision, bukan biaya retensi aktual. Dataset publik yang digunakan hanya satu potret waktu; performa belum diuji pada periode atau perusahaan lain.
 
 ---
 
@@ -441,11 +441,10 @@ analisis_telco/
 
 | Langkah | Tujuan |
 |---|---|
-| Biaya penawaran dan nilai pelanggan | Mengganti asumsi F2 dengan perhitungan biaya/manfaat untuk menentukan threshold |
-| Evaluasi top-k | Menentukan prioritas pelanggan jika kapasitas penawaran retensi terbatas |
-| Resampling (misalnya SMOTE) | Membandingkan resampling dengan `class_weight` di dalam data train |
-| Fitur tambahan | Menguji apakah informasi baru dapat meningkatkan PR-AUC dari kisaran 0,65–0,66 |
-| Data/periode baru | Memeriksa kestabilan performa sebelum penggunaan operasional |
+| Skenario biaya | Karena biaya sebenarnya tidak tersedia, bandingkan churn terlewat yang dianggap 1, 3, dan 5 kali lebih mahal daripada salah tandai; gunakan `MonthlyCharges` hanya sebagai proksi kasar nilai pelanggan |
+| Evaluasi top-k | Hitung precision dan recall untuk 10% dan 20% pelanggan dengan probabilitas churn tertinggi pada test set |
+| Resampling dan fitur turunan | Bandingkan `class_weight` dengan SMOTE (hanya pada train), serta uji interaksi `Contract × InternetService` |
+| Batas generalisasi | Catat bahwa data hanya satu potret waktu dan belum diuji pada periode atau perusahaan lain |
 
 Hasil notebook merupakan evaluasi eksperimen pada test set, bukan sertifikasi untuk penggunaan operasional.
 
@@ -462,11 +461,10 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 1. Periksa pengalaman pelanggan baru, khususnya selama 12 bulan pertama.
 2. Analisis lebih lanjut segmen kontrak *month-to-month* dan pelanggan *fiber optic*, sambil mempertimbangkan karakteristik layanan dan tagihan.
 3. Teliti alasan operasional atau pengalaman pelanggan yang mungkin berkaitan dengan *electronic check* sebelum merancang intervensi.
-4. Tetapkan biaya nyata satu penawaran dan nilai pelanggan yang dipertahankan, lalu pilih threshold berdasarkan biaya total. Threshold 0,37 saat ini dipilih dengan F2 pada prediksi out-of-fold; bobotnya masih asumsi, bukan biaya bisnis.
-5. Jika kapasitas tindakan terbatas, urutkan probabilitas churn dan evaluasi strategi *top-k* sesuai kuota tim retensi.
-6. Bandingkan `class_weight` dengan resampling seperti SMOTE; lakukan resampling hanya pada data train atau di dalam cross-validation.
-7. Cari dan evaluasi fitur tambahan; gunakan PR-AUC sekitar 0,65–0,66 sebagai baseline pembanding. Pastikan fitur tersedia sebelum waktu prediksi dan tidak membocorkan target.
-8. Uji kestabilan model pada data/periode baru, lalu ukur dampak program retensi melalui eksperimen sebelum mempertimbangkan penggunaan operasional.
+4. Biaya intervensi dan kuota tindakan tidak tersedia pada dataset publik. Sebagai analisis sensitivitas, bandingkan skenario biaya churn yang terlewat sebesar 1, 3, dan 5 kali biaya salah tandai; `MonthlyCharges` hanya proksi kasar nilai pelanggan, bukan nilai retensi aktual.
+5. Ukur Precision dan Recall pada *top-k* 10% dan 20% pelanggan berisiko tertinggi untuk menilai pemeringkatan model.
+6. Bandingkan `class_weight` dengan SMOTE yang diterapkan hanya pada data train, dan uji fitur turunan seperti interaksi `Contract × InternetService`.
+7. Gunakan PR-AUC sekitar 0,65–0,66 sebagai baseline. Dataset hanya satu potret waktu, jadi hasil belum menunjukkan generalisasi ke periode atau perusahaan lain.
 
 ---
 
@@ -481,12 +479,12 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 | Persiapan train/test | Selesai | Split stratified 80:20, 26 fitur |
 | Eksperimen model dan cross-validation | Selesai | Lima kandidat dibandingkan; PR-AUC CV terbaik sekitar 0,665 |
 | Pemilihan threshold | Selesai untuk eksperimen | Threshold 0,37 dipilih dengan F2 dari prediksi out-of-fold di data train |
-| Evaluasi final pada test set | Selesai | Test set dievaluasi satu kali; HistGradientBoosting menghasilkan recall 0,877 dan precision 0,461 pada threshold 0,37 |
-| Penetapan threshold berbasis biaya bisnis | Tahap berikutnya | Minta biaya penawaran, nilai pelanggan yang dipertahankan, dan efektivitas intervensi |
-| Evaluasi strategi top-k | Tahap berikutnya | Urutkan probabilitas sesuai kuota tim retensi |
-| Resampling dan fitur tambahan | Tahap berikutnya | Bandingkan SMOTE dengan `class_weight`; cari fitur baru di atas baseline PR-AUC 0,65–0,66 |
-| Validasi pada data/periode baru | Tahap berikutnya | Periksa kestabilan performa sebelum penggunaan operasional |
-| Validasi intervensi retensi | Tahap berikutnya | Ukur dampak program dengan eksperimen bisnis |
+| Evaluasi kandidat pada test set | Selesai | HistGradientBoosting pada threshold 0,37 menghasilkan recall 0,877 dan precision 0,461; threshold dipilih dari prediksi out-of-fold train |
+| Analisis sensitivitas biaya | Rekomendasi notebook | Bandingkan rasio biaya FN:FP 1:1, 3:1, dan 5:1; `MonthlyCharges` sebagai proksi kasar |
+| Evaluasi strategi top-k | Rekomendasi notebook | Hitung Precision dan Recall pada 10% dan 20% probabilitas churn tertinggi di test set |
+| Resampling dan fitur turunan | Rekomendasi notebook | Bandingkan SMOTE pada train dengan `class_weight`; uji interaksi `Contract × InternetService` |
+| Batas generalisasi | Keterbatasan data | Dataset satu potret waktu; belum diuji pada periode/perusahaan lain |
+| Validasi intervensi retensi | Di luar analisis notebook | Biaya, kuota, dan dampak intervensi tidak tersedia pada dataset publik |
 | Deployment dan monitoring | Di luar cakupan saat ini | Pertimbangkan setelah model dan proses validasi tersedia |
 
 ### Roadmap lanjutan
@@ -495,11 +493,11 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 flowchart LR
     A["Cleaning · EDA · rekayasa fitur"] --> B["Bandingkan model<br/>dan cross-validation"]
     B --> C["Pilih threshold dari<br/>prediksi out-of-fold"]
-    C --> D["Evaluasi satu kali<br/>pada test set"]
-    D --> E["Kumpulkan biaya penawaran<br/>dan nilai pelanggan"]
-    D --> F["Evaluasi peringkat<br/>top-k"]
-    D --> G["Bandingkan resampling<br/>dan fitur tambahan"]
-    E --> H["Validasi pada data/<br/>periode baru"]
+    C --> D["Evaluasi kandidat<br/>pada test set"]
+    D --> E["Uji skenario biaya<br/>FN:FP 1:1 · 3:1 · 5:1"]
+    D --> F["Evaluasi top-k<br/>10% dan 20%"]
+    D --> G["Bandingkan SMOTE<br/>dan fitur interaksi"]
+    E --> H["Validasi pada data/<br/>periode baru jika tersedia"]
     F --> H
     G --> H
     H --> I["Uji dampak intervensi retensi"]
