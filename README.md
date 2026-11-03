@@ -434,7 +434,6 @@ analisis_telco/
 | 2 | Tetapkan kriteria biaya churn terlewat, salah tandai, dan kapasitas retensi bersama dosen/tim | Asumsi evaluasi threshold atau top-k yang disepakati; jangan mengasumsikan biaya yang belum diketahui |
 | 3 | Uji satu perubahan pada satu waktu: `class_weight`/SMOTE di dalam pipeline, lalu fitur interaksi `Contract × InternetService` | Catatan eksperimen yang membandingkan hasil pada CV tanpa menyentuh holdout |
 | 4 | Jika tersedia, kumpulkan data periode berikutnya; bekukan sebagai holdout sebelum pemilihan model dan threshold | Evaluasi generalisasi pada data yang belum digunakan |
-| 5 | Pilih pendekatan berdasarkan hasil validasi, keterbatasan data, dan biaya kesalahan; susun rekomendasi serta bahan presentasi UAS | Model/analisis final dan justifikasi yang dapat ditelusuri ke notebook |
 
 Hasil CV ini masih merupakan gambaran awal dari dataset yang tersedia. Hasil tersebut belum cukup untuk menyatakan model siap digunakan pada pelanggan sebenarnya.
 
