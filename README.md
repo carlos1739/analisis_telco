@@ -331,7 +331,7 @@ Evaluasi menggunakan repeated stratified 5-fold CV dengan tiga pengulangan, sehi
 
 ### 11.4 Status hasil dan batas evaluasi
 
-Tabel berikut berasal dari sel **Validasi Eksperimen Milestone 1** pada notebook dan dapat dihitung ulang dari kode yang dikumpulkan.
+Tabel berikut berasal dari bagian **Validasi Eksperimen Milestone 1** di notebook. Jalankan sel evaluasi pada bagian tersebut untuk menghitung ulang hasilnya. Percobaan awal yang memakai split test berulang hanya dicatat sebagai eksplorasi dan tidak digunakan dalam tabel ini.
 
 | Model | Accuracy (mean ± SD) | Precision (mean ± SD) | Recall (mean ± SD) | F1 (mean ± SD) | PR-AUC (mean ± SD) |
 |---|---:|---:|---:|---:|---:|
@@ -368,7 +368,7 @@ python -m pip install -r requirement.txt
 jupyter lab
 ```
 
-Di JupyterLab, buka `notebook/churn_analysis.ipynb` dan jalankan sel dari atas ke bawah. Kode modeling lama masih ada sebagai catatan percobaan. Untuk membandingkan model, gunakan tabel pada bagian **Validasi Eksperimen Milestone 1**.
+Di JupyterLab, buka `notebook/churn_analysis.ipynb` dan jalankan sel dari atas ke bawah. Beberapa sel awal berisi percobaan model yang memakai split test berulang, jadi hasilnya hanya untuk eksplorasi. Untuk membandingkan model dan mengutip hasil Milestone 1, gunakan tabel pada bagian **Validasi Eksperimen Milestone 1**.
 
 Jika PowerShell menolak aktivasi virtual environment, jalankan sesi PowerShell dengan kebijakan yang mengizinkan skrip aktivasi untuk pengguna atau gunakan interpreter `.venv\Scripts\python.exe` secara langsung.
 
