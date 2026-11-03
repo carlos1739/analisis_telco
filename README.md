@@ -1,6 +1,6 @@
 # Prediksi Churn Pelanggan Telekomunikasi
 
-> Proyek analisis data pelanggan telekomunikasi untuk memahami pola churn dan menguji model klasifikasi awal. Notebook mencakup pemeriksaan data, EDA, rekayasa fitur, perbandingan model, cross-validation, serta eksplorasi threshold. Hasil masih bersifat eksperimen dan belum siap untuk penggunaan operasional.
+> Dalam proyek ini, kami mempelajari data pelanggan telekomunikasi untuk melihat pola yang berkaitan dengan churn. Kami memeriksa dan membersihkan data, melakukan EDA, membuat beberapa fitur, lalu membandingkan model klasifikasi awal. Hasilnya masih berupa eksperimen akademik, belum untuk digunakan langsung oleh perusahaan.
 
 [Buka notebook di Google Colab](https://colab.research.google.com/github/carlos1739/analisis_telco/blob/master/notebook/churn_analysis.ipynb)
 
@@ -20,37 +20,40 @@
 
 ## 1. Project Overview
 
-Proyek ini menggunakan dataset **Telco Customer Churn** untuk mengeksplorasi karakteristik pelanggan yang berhenti berlangganan. Tujuan akhirnya adalah membantu memahami kelompok pelanggan yang perlu diperhatikan dan menyediakan fondasi data untuk model klasifikasi churn.
+Kami menggunakan dataset **Telco Customer Churn** untuk melihat karakteristik pelanggan yang berhenti berlangganan. Analisis ini diharapkan dapat menunjukkan kelompok yang menarik untuk diteliti lebih lanjut dan menjadi langkah awal dalam membandingkan model klasifikasi churn.
 
-### Main Goal
+### Tujuan proyek
 
-- Memahami distribusi churn dan karakteristik pelanggan.
-- Mengidentifikasi fitur dan segmen yang berasosiasi dengan churn.
-- Membersihkan data dan membentuk fitur yang siap digunakan untuk eksperimen klasifikasi.
-- Merumuskan tindak lanjut analisis yang dapat divalidasi oleh tim retensi.
+- Melihat perbandingan jumlah pelanggan yang churn dan tidak churn.
+- Mencari karakteristik pelanggan yang tampak berkaitan dengan churn.
+- Menyiapkan data dan fitur untuk mencoba beberapa model klasifikasi.
+- Menentukan hal-hal yang masih perlu diuji pada tahap berikutnya.
 
-### Project Snapshot
+### Ringkasan proyek
 
-| Area | Implementasi saat ini |
+| Bagian | Keterangan |
 |---|---|
-| Domain | Analitik pelanggan telekomunikasi |
-| Tipe analisis | Eksplorasi data, persiapan fitur, dan eksperimen klasifikasi biner |
+| Topik | Churn pelanggan telekomunikasi |
+| Jenis masalah | Klasifikasi biner dan eksplorasi data |
 | Sumber data | IBM Sample Data Sets — Telco Customer Churn |
-| Data mentah | 7.043 pelanggan dan 21 kolom |
+| Isi data | 7.043 pelanggan, 21 kolom |
 | Target | `Churn` (`Yes` / `No`) |
-| Notebook | `notebook/churn_analysis.ipynb` — Cleaning, EDA, Engineer, dan eksperimen model |
-| Dataset lokal | `data/Churn_Customer_telco.zip` |
-| Model yang diuji | Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting |
-| Hasil notebook final | Gradient Boosting, threshold 0,37: recall 0,877 dan precision 0,461 pada test set |
-| Deployment | Belum termasuk dalam proyek saat ini |
+| Notebook | `notebook/churn_analysis.ipynb` |
+| Dataset | `data/Churn_Customer_telco.zip` |
+| Model yang dibandingkan | Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting |
+| Evaluasi utama | Repeated stratified 5-fold CV, 3 pengulangan |
+| Catatan | Hasil eksperimen lama pada test set bersifat eksploratif karena set tersebut telah digunakan berulang kali |
+| Deployment | Tidak dikerjakan pada tahap ini |
 
 ---
 
 ## 2. Problem Statement
 
-Perusahaan telekomunikasi perlu mempertahankan pelanggan yang sudah ada. Jika pelanggan yang berisiko berhenti berlangganan tidak diketahui lebih awal, perusahaan kehilangan peluang untuk memahami masalah layanan atau menguji intervensi retensi yang tepat.
+Pelanggan yang berhenti berlangganan dapat berdampak pada pendapatan perusahaan. Karena itu, perusahaan perlu memahami karakteristik pelanggan yang berhenti dan hal-hal yang mungkin berkaitan dengan keputusan tersebut. Dataset ini memberi kesempatan untuk mulai memeriksa pola-pola itu.
 
-**Pertanyaan utama:** pola apa pada demografi, layanan, kontrak, dan informasi akun yang berhubungan dengan churn, serta bagaimana data historis dapat disiapkan untuk memprediksi pelanggan yang mungkin churn?
+**Pertanyaan utama:** karakteristik demografi, layanan, kontrak, atau akun apa yang tampak berkaitan dengan churn? Kami juga ingin mengetahui bagaimana beberapa model klasifikasi awal bekerja pada dataset ini.
+
+Satu baris mewakili satu pelanggan pada saat data dibuat. Dataset ini tidak mencantumkan urutan waktu maupun jangka waktu prediksi. Jadi, hasil analisis tidak dapat langsung dianggap sebagai prediksi siapa yang akan berhenti berlangganan di masa depan.
 
 | Tantangan | Dampak |
 |---|---|
@@ -72,7 +75,7 @@ Perusahaan telekomunikasi perlu mempertahankan pelanggan yang sudah ada. Jika pe
 | Data analyst | Mengeksplorasi dan menjelaskan pola churn dalam dataset |
 | Data scientist / ML engineer | Menggunakan data yang telah dibersihkan sebagai dasar eksperimen model |
 
-Analisis ditujukan untuk mendukung penyelidikan dan perencanaan tindak lanjut. Notebook belum menghasilkan sistem penilaian risiko pelanggan untuk penggunaan operasional.
+Hasil analisis dapat menjadi bahan untuk menentukan pertanyaan lanjutan, tetapi belum berupa sistem yang memberi skor risiko kepada pelanggan atau siap dipakai untuk mengambil tindakan.
 
 ---
 
@@ -87,9 +90,9 @@ Analisis ditujukan untuk mendukung penyelidikan dan perencanaan tindak lanjut. N
 
 ### Cakupan notebook yang sudah dikerjakan
 
-Notebook mencakup **Cleaning Data**, **EDA**, dan **Engineer** (feature engineering serta persiapan data), dilanjutkan eksperimen model. Beberapa model dibandingkan menggunakan cross-validation dan metrik kelas churn; threshold juga dieksplorasi melalui precision-recall curve.
+Di notebook, kami melakukan pembersihan data, EDA, pembuatan fitur, lalu mencoba beberapa model classical machine learning. Pada bagian akhir, baseline dan kandidat dibandingkan menggunakan repeated stratified cross-validation. Encoding dan scaling dijalankan di dalam pipeline pada setiap fold.
 
-Notebook telah menyelesaikan perbandingan model dan evaluasi pada test set yang ditahan dari proses training serta pemilihan threshold. Hasilnya masih eksperimen pada dataset ini; validasi pada periode/data baru dan penggunaan operasional belum dilakukan. Notebook juga belum mencakup deployment, monitoring, atau pengujian dampak intervensi retensi.
+Pada percobaan sebelumnya, test set yang sama digunakan beberapa kali untuk membandingkan model dan threshold. Karena itu, hasil tersebut kami anggap sebagai eksplorasi, bukan evaluasi akhir yang independen. Perbandingan terbaru menggunakan repeated stratified CV. Kami belum menguji model pada data dari periode lain atau menilai dampaknya jika dipakai dalam program retensi.
 
 ---
 
@@ -99,8 +102,8 @@ Notebook telah menyelesaikan perbandingan model dan evaluasi pada test set yang 
 
 - Dataset pelanggan berisi demografi, layanan, kontrak, pembayaran, dan target churn.
 - Notebook untuk pembersihan data dan analisis eksploratif.
-- Persiapan fitur, pemisahan data train/test, dan eksperimen Logistic Regression, KNN, Decision Tree, Random Forest, serta HistGradientBoosting.
-- Perbandingan cross-validation, evaluasi metrik kelas churn, dan eksplorasi threshold.
+- Rekayasa fitur per baris dan eksperimen Logistic Regression, KNN, Decision Tree, Random Forest, serta HistGradientBoosting.
+- Perbandingan repeated stratified cross-validation dengan preprocessing yang di-fit ulang pada setiap fold.
 - Ringkasan temuan dan rekomendasi untuk analisis lanjutan.
 
 ### Belum termasuk dalam proyek saat ini
@@ -115,14 +118,14 @@ Notebook telah menyelesaikan perbandingan model dan evaluasi pada test set yang 
 |---|---|---|
 | Data | Membersihkan dan mengeksplorasi dataset historis | Menjamin dataset mewakili kondisi pelanggan terkini |
 | Analisis | Menjelaskan pola dan asosiasi yang ditemukan | Menyimpulkan sebab-akibat dari korelasi |
-| Machine learning | Melatih, membandingkan, memilih threshold dari prediksi out-of-fold pada train, dan mengevaluasi pada test set | Menyatakan model/threshold siap operasional tanpa validasi pada data/periode baru |
+| Machine learning | Membandingkan baseline dan kandidat dengan pipeline repeated stratified cross-validation | Menganggap hasil test set lama independen atau menyatakan model siap operasional tanpa data/periode baru |
 | Retensi | Memberi hipotesis segmen untuk diteliti | Menjamin intervensi tertentu akan mengurangi churn |
 
 ---
 
 ## 6. Analytical Architecture
 
-Proyek ini merupakan alur analisis notebook, bukan aplikasi multi-service. Arsip dataset dimuat ke notebook, dibersihkan dan dianalisis, lalu fitur dibagi menjadi train dan test untuk eksperimen kandidat model, cross-validation, serta eksplorasi threshold.
+Pekerjaan ini dilakukan di dalam notebook, bukan sebagai aplikasi. Dataset dimuat dan dibersihkan terlebih dahulu, kemudian kami melakukan EDA dan membandingkan beberapa model. Pada validasi silang, proses encoding dan scaling dipelajari dari data training di setiap fold agar informasi dari fold validasi tidak ikut digunakan.
 
 ### 6.1 Alur dari masalah hingga tindak lanjut
 
@@ -132,21 +135,18 @@ flowchart TD
     B --> C["Dataset historis<br/>7.043 pelanggan · 21 kolom"]
     C --> D["Pemeriksaan dan pembersihan<br/>Duplikat · missing value · tipe data · kategori"]
     D --> E["EDA<br/>Distribusi · perbandingan · korelasi · segmentasi"]
-    E --> F["Rekayasa fitur<br/>TenureGroup · TotalServices · target biner"]
-    F --> G["Transformasi fitur<br/>One-hot encoding · standardisasi numerik"]
-    G --> H["Pembagian stratified<br/>80% train · 20% test"]
+    E --> F["Rekayasa fitur per baris<br/>TenureGroup · TotalServices"]
+    F --> G["Pipeline per fold<br/>One-hot encoding · standardisasi"]
+    G --> H["Repeated stratified CV<br/>5 fold · 3 pengulangan"]
     H --> I{"Kualitas data siap?"}
     I -->|"Tidak"| D
-    I -->|"Ya"| J["Dataset siap untuk eksperimen model"]
-    J --> K["Bandingkan kandidat model<br/>cross-validation"]
-    K --> L["Evaluasi metrik kelas churn"]
-    L --> M["Pilih threshold dari<br/>prediksi out-of-fold train"]
-    M --> N["Evaluasi pada test set"]
-    N -. "Tahap berikutnya" .-> O["Skenario biaya · top-k<br/>SMOTE · fitur interaksi"]
-    O -.-> P["Generalisasi terbatas<br/>ke satu potret waktu"]
+    I -->|"Ya"| J["Bandingkan baseline dan kandidat"]
+    J --> K["PR-AUC · Recall · F1<br/>rata-rata dan variasi"]
+    K -. "Tahap berikutnya" .-> O["Data/periode baru · evaluasi biaya<br/>top-k · fitur interaksi"]
+    O -.-> P["Validasi generalisasi<br/>sebelum UAS"]
     classDef done fill:#e7f5e9,stroke:#2e7d32,color:#183b20
     classDef next fill:#fff4e5,stroke:#b26a00,color:#633b00
-    class A,B,C,D,E,F,G,H,I,J,K,L,M,N done
+    class A,B,C,D,E,F,G,H,I,J,K done
     class O,P next
 ```
 
@@ -158,18 +158,11 @@ flowchart LR
     CSV --> LOAD["Muat dan inspeksi"]
     LOAD --> CLEAN["Pembersihan data"]
     CLEAN --> EDA["EDA dan analisis segmen"]
-    EDA --> FEATURES["Rekayasa fitur dan encoding"]
-    FEATURES --> SPLIT["Train/test split dan scaling"]
-    SPLIT --> TRAIN["X_train<br/>5.634 × 26"]
-    SPLIT --> TEST["X_test<br/>1.409 × 26"]
-    TRAIN --> CV["Perbandingan kandidat<br/>cross-validation"]
-    TRAIN --> OOF["Prediksi out-of-fold<br/>pemilihan threshold F2"]
-    TRAIN --> FIT["Pelatihan kandidat"]
-    OOF --> TESTEVAL["Terapkan threshold terpilih<br/>dan evaluasi final"]
-    FIT --> TESTEVAL
-    TEST --> TESTEVAL
-    TESTEVAL -.-> FUTURE["Skenario biaya · top-k<br/>SMOTE · Contract × InternetService"]
-    FUTURE -.-> NEWDATA["Data hanya satu potret waktu;<br/>periode baru belum tersedia"]
+    EDA --> FEATURES["Fitur per baris<br/>TenureGroup · TotalServices"]
+    FEATURES --> CV["Repeated stratified CV<br/>5 fold × 3 pengulangan"]
+    CV --> PIPE["Pipeline di setiap fold<br/>encoding · scaling · model"]
+    PIPE --> RESULTS["PR-AUC · Recall · F1<br/>mean ± standar deviasi"]
+    RESULTS -.-> FUTURE["Evaluasi pada data/periode baru<br/>sebelum klaim generalisasi"]
 ```
 
 ---
@@ -188,7 +181,7 @@ flowchart LR
 | scikit-learn | Pembagian dataset, encoding/scaling, cross-validation, tuning, model klasifikasi, dan evaluasi |
 | Google Colab | Opsi menjalankan notebook di browser |
 
-> File `requirement.txt` saat ini belum mendeklarasikan dependensi. Daftar instalasi untuk menjalankan notebook secara lokal dicantumkan pada bagian 12.
+Dependensi untuk menjalankan notebook dicatat di `requirement.txt`.
 
 ---
 
@@ -196,7 +189,7 @@ flowchart LR
 
 ### 8.1 Sumber dan ukuran data
 
-Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets dan tersedia pada repositori sebagai `data/Churn_Customer_telco.zip`.
+Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets. Arsip yang dipakai dalam proyek tersedia di [repositori proyek](https://github.com/carlos1739/analisis_telco/blob/master/data/Churn_Customer_telco.zip). Unit observasinya adalah satu baris per pelanggan pada satu snapshot; dataset tidak menyediakan deret waktu atau horizon prediksi.
 
 | Properti | Nilai |
 |---|---|
@@ -209,16 +202,16 @@ Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets
 
 ### 8.2 Kelompok kolom
 
-| Kelompok | Kolom |
-|---|---|
-| Identitas | `customerID` — diperiksa untuk duplikat, kemudian dihapus sebelum modeling |
-| Demografi | `gender`, `SeniorCitizen`, `Partner`, `Dependents` |
-| Masa berlangganan | `tenure` |
-| Telepon | `PhoneService`, `MultipleLines` |
-| Internet dan layanan tambahan | `InternetService`, `OnlineSecurity`, `OnlineBackup`, `DeviceProtection`, `TechSupport`, `StreamingTV`, `StreamingMovies` |
-| Kontrak dan pembayaran | `Contract`, `PaperlessBilling`, `PaymentMethod` |
-| Tagihan | `MonthlyCharges`, `TotalCharges` |
-| Target | `Churn` |
+| Kelompok | Kolom | Deskripsi |
+|---|---|---|
+| Identitas | `customerID` | ID pelanggan untuk pemeriksaan duplikasi; tidak digunakan sebagai fitur |
+| Demografi | `gender`, `SeniorCitizen`, `Partner`, `Dependents` | Informasi profil, status senior, pasangan, dan tanggungan |
+| Masa berlangganan | `tenure` | Lama pelanggan berlangganan dalam bulan |
+| Telepon | `PhoneService`, `MultipleLines` | Status layanan telepon dan lebih dari satu saluran |
+| Internet dan layanan tambahan | `InternetService`, `OnlineSecurity`, `OnlineBackup`, `DeviceProtection`, `TechSupport`, `StreamingTV`, `StreamingMovies` | Jenis internet dan layanan tambahan yang digunakan |
+| Kontrak dan pembayaran | `Contract`, `PaperlessBilling`, `PaymentMethod` | Jenis kontrak, tagihan tanpa kertas, dan metode pembayaran |
+| Tagihan | `MonthlyCharges`, `TotalCharges` | Tagihan bulanan dan total tagihan pelanggan |
+| Target | `Churn` | Label `Yes` (churn) atau `No` (tidak churn) |
 
 ### 8.3 Definisi target
 
@@ -231,7 +224,7 @@ Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets
 
 ## 9. Bagian 1 — Cleaning Data
 
-Bagian ini memuat pemeriksaan kualitas dan pembersihan dataset sebelum analisis eksploratif.
+Sebelum melihat pola churn, kami memeriksa duplikasi, nilai kosong, dan tipe data. Beberapa nilai juga dirapikan agar bisa digunakan dalam analisis.
 
 ### 9.1 Pemeriksaan dan transformasi data
 
@@ -259,7 +252,7 @@ Bagian ini memuat pemeriksaan kualitas dan pembersihan dataset sebelum analisis 
 
 ## 10. Bagian 2 — EDA
 
-Bagian EDA mengeksplorasi distribusi target serta hubungan fitur numerik dan kategorikal dengan churn.
+Pada EDA, kami melihat jumlah pelanggan yang churn, lalu membandingkan beberapa karakteristik pelanggan berdasarkan status churn.
 
 ### 10.1 Distribusi churn
 
@@ -268,7 +261,7 @@ Bagian EDA mengeksplorasi distribusi target serta hubungan fitur numerik dan kat
 | Tidak churn | 5.174 | 73,5% |
 | Churn | 1.869 | 26,5% |
 
-Target tidak seimbang, sekitar tiga pelanggan bertahan untuk setiap satu pelanggan churn. Model baseline yang selalu menebak “tidak churn” sudah mencapai akurasi sekitar **73,5%**, tetapi tidak menemukan pelanggan churn. Oleh sebab itu, akurasi saja tidak cukup untuk menilai model.
+Jumlah pelanggan yang churn lebih sedikit daripada yang tidak churn: kira-kira satu dari empat pelanggan tercatat churn. Jika model selalu menebak “tidak churn”, akurasinya tetap sekitar **73,5%**, tetapi model sama sekali tidak menemukan pelanggan churn. Karena itu, kami juga melihat metrik selain akurasi.
 
 ### 10.2 Perbandingan fitur numerik
 
@@ -279,7 +272,7 @@ Target tidak seimbang, sekitar tiga pelanggan bertahan untuk setiap satu pelangg
 | `MonthlyCharges` — rata-rata | 74,4 | 61,3 | Tagihan bulanan pelanggan churn cenderung lebih tinggi |
 | `TotalCharges` — rata-rata | 1.531,8 | 2.549,9 | Nilai lebih rendah sejalan dengan masa berlangganan yang lebih pendek |
 
-Notebook melaporkan perbedaan pada ketiga fitur numerik sebagai signifikan secara statistik menurut uji Mann–Whitney. Pemeriksaan outlier IQR tidak menemukan nilai yang perlu dihapus berdasarkan aturan tersebut.
+Uji Mann–Whitney pada notebook menunjukkan perbedaan yang signifikan secara statistik untuk ketiga fitur numerik tersebut. Pemeriksaan dengan aturan IQR tidak menandai nilai yang perlu dihapus sebagai outlier.
 
 ### 10.3 Asosiasi kategorikal dan segmen
 
@@ -295,7 +288,7 @@ Notebook melaporkan perbedaan pada ketiga fitur numerik sebagai signifikan secar
 | Memiliki `OnlineSecurity` atau `TechSupport` | Sekitar 15% |
 | Segmen *month-to-month* + *fiber optic* | 54,6% |
 
-Notebook mengidentifikasi `Contract`, `InternetService`, dan `PaymentMethod` sebagai fitur kategorikal dengan asosiasi terkuat berdasarkan Cramér’s V. Untuk kolom layanan tambahan, kategori `No` juga mencakup pelanggan yang tidak menggunakan internet; interpretasikan perbandingan bersama `InternetService`.
+Berdasarkan Cramér’s V, `Contract`, `InternetService`, dan `PaymentMethod` memiliki asosiasi paling kuat dengan target di antara fitur kategorikal yang diperiksa. Perlu diperhatikan bahwa nilai `No` pada kolom layanan tambahan juga dapat berarti pelanggan tidak menggunakan internet. Karena itu, kolom-kolom tersebut sebaiknya dibaca bersama `InternetService`.
 
 ### 10.4 Masa berlangganan dan korelasi
 
@@ -308,13 +301,13 @@ Notebook mengidentifikasi `Contract`, `InternetService`, dan `PaymentMethod` seb
 
 `tenure` berkorelasi negatif dengan churn (-0,35). `TotalCharges` berkorelasi kuat dengan `tenure` (0,83) dan hampir identik dengan `tenure × MonthlyCharges` (korelasi 1,0). Hubungan ini perlu ditinjau saat pemilihan fitur, terutama untuk model yang sensitif terhadap multikolinearitas.
 
-> Semua angka di bagian ini merupakan hasil analisis dataset historis pada notebook. Asosiasi tidak menyatakan sebab-akibat dan belum mengukur efektivitas program retensi.
+> Angka-angka ini berasal dari dataset historis yang dianalisis di notebook. Pola yang terlihat tidak membuktikan sebab-akibat dan belum menunjukkan apakah suatu program retensi akan berhasil.
 
 ---
 
 ## 11. Bagian 3 — Engineer: Feature Engineering dan Eksperimen Model
 
-Bagian Engineer menyiapkan variabel target dan fitur, kemudian notebook melanjutkan ke eksperimen dan evaluasi kandidat klasifikasi.
+Setelah EDA, kami menyiapkan fitur dan target untuk percobaan klasifikasi.
 
 ### 11.1 Fitur turunan
 
@@ -324,48 +317,36 @@ Bagian Engineer menyiapkan variabel target dan fitur, kemudian notebook melanjut
 | `TotalServices` | Menghitung jumlah nilai `Yes` di delapan kolom layanan | Menggambarkan jumlah layanan yang digunakan |
 | `Churn` numerik | `Yes` menjadi `1`, `No` menjadi `0` | Variabel target klasifikasi |
 
-Kolom `gender` dihapus dari fitur modeling karena tidak signifikan pada uji yang dilaporkan notebook. `PhoneService` tetap berada di antara fitur.
+### 11.2 Fitur awal dan preprocessing
 
-### 11.2 Encoding, split, dan scaling
+`TenureGroup` merangkum lama berlangganan ke dalam beberapa rentang, sedangkan `TotalServices` menunjukkan jumlah layanan yang digunakan pelanggan. Keduanya dibuat tanpa menggunakan target. Kami juga mempertahankan `gender` dalam perbandingan akhir. Memilih fitur berdasarkan hubungannya dengan target dari seluruh data sebelum validasi bisa membocorkan informasi ke evaluasi.
 
-1. Fitur kategorikal diubah dengan one-hot encoding (`drop_first=True`), menghasilkan **26 fitur**.
-2. Dataset dibagi menjadi **80% train** dan **20% test** menggunakan `random_state=42` serta `stratify=y`.
-3. Standardisasi diterapkan pada `tenure`, `MonthlyCharges`, `TotalCharges`, dan `TotalServices`.
-4. Scaler di-*fit* hanya menggunakan train; test hanya ditransformasi dengan scaler yang sama untuk mencegah kebocoran informasi dari test ke train.
+Kolom kategori diubah dengan one-hot encoding, sementara fitur numerik distandardisasi. Kedua langkah ini ada di dalam `Pipeline`, sehingga encoder dan scaler hanya belajar dari data training pada masing-masing fold. Kategori yang tidak muncul di data training ditangani dengan `handle_unknown='ignore'`.
 
-| Bagian | Jumlah baris | Jumlah fitur |
-|---|---:|---:|
-| Train | 5.634 | 26 |
-| Test | 1.409 | 26 |
+### 11.3 Baseline, kandidat, dan desain evaluasi
 
-Pemeriksaan akhir notebook menunjukkan tidak ada missing value di `X_train` dan `X_test`; proporsi target masing-masing tetap sekitar 73,5% tidak churn dan 26,5% churn.
+Kami membandingkan baseline mayoritas dengan Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting. Parameter model ditentukan sebelum evaluasi. Pada tahap ini, kami belum melakukan tuning hyperparameter atau memilih threshold.
 
-### 11.3 Kandidat model dan cross-validation
+Evaluasi menggunakan repeated stratified 5-fold CV dengan tiga pengulangan, sehingga proporsi kelas churn dijaga di setiap fold. Kami mencatat rata-rata dan standar deviasi Accuracy, Precision, Recall, F1, dan PR-AUC. PR-AUC menjadi metrik utama karena jumlah kelas churn lebih sedikit; Recall dan F1 membantu melihat seberapa baik model mengenali pelanggan churn.
 
-Notebook membandingkan Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting. `TotalCharges` juga diuji dengan dan tanpa kolom tersebut; penghapusannya mengurangi jumlah fitur dari 26 menjadi 25, tetapi tidak meningkatkan hasil baseline Logistic Regression secara berarti.
+### 11.4 Status hasil dan batas evaluasi
 
-| Model / eksperimen | Hasil PR-AUC cross-validation |
-|---|---:|
-| Logistic Regression baseline | 0,666 |
-| Logistic Regression dengan `class_weight` | 0,665 |
-| KNN (tanpa `TotalCharges`) | 0,601 |
-| Decision Tree | 0,637 |
-| Random Forest | 0,662 |
-| HistGradientBoosting | 0,665 |
+Tabel berikut berasal dari sel **Validasi Eksperimen Milestone 1** pada notebook dan dapat dihitung ulang dari kode yang dikumpulkan.
 
-HistGradientBoosting memiliki PR-AUC CV tertinggi di antara kandidat model baru, tetapi nilainya hampir sama dengan Logistic Regression. Perbedaan ini kecil; pemilihan akhir perlu mempertimbangkan kompleksitas, biaya kesalahan, dan validasi lebih lanjut.
+| Model | Accuracy (mean ± SD) | Precision (mean ± SD) | Recall (mean ± SD) | F1 (mean ± SD) | PR-AUC (mean ± SD) |
+|---|---:|---:|---:|---:|---:|
+| Baseline mayoritas | 0,735 ± 0,000 | 0,000 ± 0,000 | 0,000 ± 0,000 | 0,000 ± 0,000 | 0,265 ± 0,000 |
+| Logistic Regression | 0,804 ± 0,007 | 0,665 ± 0,018 | 0,531 ± 0,020 | 0,590 ± 0,016 | 0,660 ± 0,018 |
+| KNN | 0,777 ± 0,012 | 0,587 ± 0,025 | 0,536 ± 0,029 | 0,560 ± 0,024 | 0,576 ± 0,015 |
+| Decision Tree | 0,739 ± 0,013 | 0,506 ± 0,016 | 0,798 ± 0,031 | 0,619 ± 0,012 | 0,613 ± 0,019 |
+| Random Forest | 0,765 ± 0,009 | 0,541 ± 0,013 | 0,763 ± 0,028 | 0,633 ± 0,015 | 0,662 ± 0,019 |
+| HistGradientBoosting | 0,800 ± 0,008 | 0,651 ± 0,019 | 0,529 ± 0,029 | 0,583 ± 0,021 | 0,655 ± 0,019 |
 
-### 11.4 Hasil evaluasi model pada test set
+Random Forest memperoleh PR-AUC rata-rata tertinggi, yaitu 0,662. Hasil Logistic Regression hampir sama, yaitu 0,660, sehingga belum cukup alasan untuk menyatakan Random Forest jelas lebih baik. Random Forest memiliki Recall lebih tinggi dan Precision lebih rendah. Decision Tree memperoleh Recall tertinggi, tetapi PR-AUC-nya lebih rendah. Baseline mayoritas menunjukkan lagi bahwa Accuracy 0,735 saja tidak berarti model mampu mengenali churn. Untuk saat ini, kami belum memilih model final.
 
-| Model / threshold | Precision | Recall | F1 | PR-AUC | Churn terlewat (FN) | Non-churn salah ditandai (FP) |
-|---|---:|---:|---:|---:|---:|---:|
-| Logistic Regression baseline, 0,50 | 0,656 | 0,516 | 0,578 | 0,637 | 181 | 101 |
-| HistGradientBoosting, 0,50 | 0,513 | 0,821 | 0,632 | 0,663 | 67 | 291 |
-| HistGradientBoosting, 0,37 | 0,461 | 0,877 | 0,604 | 0,663 | 46 | 384 |
+Nilai SD menunjukkan perubahan hasil antar-fold, bukan interval kepercayaan yang independen, karena fold pada repeated CV saling berkaitan. Model masih menggunakan parameter awal; tuning dan pemilihan threshold belum dilakukan.
 
-Threshold 0,37 dipilih dengan memaksimalkan F2 pada probabilitas out-of-fold di data train, lalu diterapkan pada test set. Dari 374 pelanggan churn di test set, model melewatkan 46; sebagai trade-off, 384 pelanggan yang tidak churn ikut ditandai. PR-AUC cross-validation Gradient Boosting (0,665) hampir sama dengan Logistic Regression baseline (0,666), sehingga belum ada satu model yang jelas unggul.
-
-**Keterbatasan evaluasi:** test set tidak digunakan untuk memilih threshold; notebook memilih threshold dari prediksi out-of-fold pada data train dan menggunakannya untuk evaluasi. Namun, threshold F2 memakai asumsi recall dua kali lebih penting daripada precision, bukan biaya retensi aktual. Dataset publik yang digunakan hanya satu potret waktu; performa belum diuji pada periode atau perusahaan lain.
+Test set dari percobaan terdahulu sudah digunakan berulang kali, jadi hasilnya tidak kami anggap sebagai holdout independen. Untuk UAS, kami perlu menguji model pada data atau periode baru. Jika data baru tidak tersedia, holdout perlu ditentukan sebelum eksperimen berikutnya dimulai dan tidak digunakan untuk memilih model. Dataset ini hanya berisi satu snapshot dan tidak menyebutkan horizon prediksi.
 
 ---
 
@@ -373,21 +354,21 @@ Threshold 0,37 dipilih dengan memaksimalkan F2 pada probabilitas out-of-fold di 
 
 ### Opsi A — Google Colab
 
-Buka [notebook di Google Colab](https://colab.research.google.com/github/carlos1739/analisis_telco/blob/master/notebook/churn_analysis.ipynb), lalu jalankan sel secara berurutan. Jika arsip belum tersedia, kode notebook mencoba mengunduhnya dari repositori proyek sehingga koneksi internet diperlukan.
+Buka [notebook di Google Colab](https://colab.research.google.com/github/carlos1739/analisis_telco/blob/master/notebook/churn_analysis.ipynb), lalu jalankan sel dari atas ke bawah. Notebook akan mencoba mengunduh arsip dataset dari repositori jika file belum tersedia, jadi Colab perlu terhubung ke internet.
 
 ### Opsi B — Lokal di Windows
 
-Jalankan perintah berikut dari root repositori melalui PowerShell:
+Gunakan Python 3.11 atau 3.12, lalu jalankan perintah berikut dari root repositori melalui PowerShell:
 
 ```powershell
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
-python -m pip install pandas numpy matplotlib seaborn scipy scikit-learn notebook
+python -m pip install -r requirement.txt
 jupyter lab
 ```
 
-Di JupyterLab, buka `notebook/churn_analysis.ipynb` dan jalankan semua sel dari atas ke bawah.
+Di JupyterLab, buka `notebook/churn_analysis.ipynb` dan jalankan sel dari atas ke bawah. Kode modeling lama masih ada sebagai catatan percobaan. Untuk membandingkan model, gunakan tabel pada bagian **Validasi Eksperimen Milestone 1**.
 
 Jika PowerShell menolak aktivasi virtual environment, jalankan sesi PowerShell dengan kebijakan yang mengizinkan skrip aktivasi untuk pengguna atau gunakan interpreter `.venv\Scripts\python.exe` secara langsung.
 
@@ -428,25 +409,34 @@ analisis_telco/
 | Missing `TotalCharges` | 11 nilai; seluruhnya pada `tenure = 0`, diisi `0` |
 | Missing setelah pembersihan | 0 |
 | Dimensi data mentah | 7.043 × 21 |
-| Proporsi churn train/test | Dipertahankan melalui stratified split |
-| Fitur setelah encoding | 26 |
-| Scaling | Fit pada train, diterapkan ke train dan test |
-| Eksperimen model | Logistic Regression, KNN, Decision Tree, Random Forest, HistGradientBoosting |
-| Cross-validation | PR-AUC kandidat terbaik baru sekitar 0,665 |
-| Baseline Logistic Regression | Precision 0,656; recall 0,516; F1 0,578 pada test set |
-| Pemilihan threshold | F2 dimaksimalkan pada prediksi out-of-fold data train; threshold 0,37 tidak dipilih dari test set |
-| Evaluasi test set | HistGradientBoosting pada threshold 0,37: precision 0,461; recall 0,877; F1 0,604; 46 FN dan 384 FP |
+| Fitur turunan | `TenureGroup` dan `TotalServices`, dibuat tanpa target |
+| Preprocessing CV | One-hot encoding dan scaling berada dalam `Pipeline`, di-fit hanya pada training fold |
+| Evaluasi utama | Repeated stratified 5-fold CV, 3 pengulangan |
+| Metrik | Accuracy, Precision, Recall, F1, dan PR-AUC; mean dan standar deviasi |
+| Kandidat | Baseline mayoritas, Logistic Regression, KNN, Decision Tree, Random Forest, HistGradientBoosting |
+| Test set lama | Pernah dipakai berulang; hasilnya ditandai eksplorasi dan tidak dilaporkan sebagai evaluasi independen |
 
 ### Langkah analisis berikutnya
 
 | Langkah | Tujuan |
 |---|---|
 | Skenario biaya | Karena biaya sebenarnya tidak tersedia, bandingkan churn terlewat yang dianggap 1, 3, dan 5 kali lebih mahal daripada salah tandai; gunakan `MonthlyCharges` hanya sebagai proksi kasar nilai pelanggan |
-| Evaluasi top-k | Hitung precision dan recall untuk 10% dan 20% pelanggan dengan probabilitas churn tertinggi pada test set |
-| Resampling dan fitur turunan | Bandingkan `class_weight` dengan SMOTE (hanya pada train), serta uji interaksi `Contract × InternetService` |
-| Batas generalisasi | Catat bahwa data hanya satu potret waktu dan belum diuji pada periode atau perusahaan lain |
+| Holdout/data baru | Bekukan data atau periode baru sebelum eksperimen final untuk mengukur generalisasi |
+| Evaluasi threshold/top-k | Tentukan biaya dan kapasitas retensi terlebih dahulu; pilih threshold atau top-k hanya dari data training/validasi, lalu evaluasi sekali pada holdout |
+| Resampling dan fitur turunan | Bandingkan `class_weight` dengan SMOTE yang berada di dalam pipeline training; uji interaksi `Contract × InternetService` |
+| Batas generalisasi | Dataset hanya satu snapshot; validasi pada periode atau perusahaan lain belum tersedia |
 
-Hasil notebook merupakan evaluasi eksperimen pada test set, bukan sertifikasi untuk penggunaan operasional.
+### Rencana kerja setelah UTS menuju UAS
+
+| Urutan | Pekerjaan | Luaran/keputusan |
+|---|---|---|
+| 1 | Jalankan ulang notebook dari awal, tinjau pipeline, dan catat hasil CV beserta versi dependensi | Notebook dan tabel eksperimen yang dapat direproduksi |
+| 2 | Tetapkan kriteria biaya churn terlewat, salah tandai, dan kapasitas retensi bersama dosen/tim | Asumsi evaluasi threshold atau top-k yang disepakati; jangan mengasumsikan biaya yang belum diketahui |
+| 3 | Uji satu perubahan pada satu waktu: `class_weight`/SMOTE di dalam pipeline, lalu fitur interaksi `Contract × InternetService` | Catatan eksperimen yang membandingkan hasil pada CV tanpa menyentuh holdout |
+| 4 | Jika tersedia, kumpulkan data periode berikutnya; bekukan sebagai holdout sebelum pemilihan model dan threshold | Evaluasi generalisasi pada data yang belum digunakan |
+| 5 | Pilih pendekatan berdasarkan hasil validasi, keterbatasan data, dan biaya kesalahan; susun rekomendasi serta bahan presentasi UAS | Model/analisis final dan justifikasi yang dapat ditelusuri ke notebook |
+
+Hasil CV ini masih merupakan gambaran awal dari dataset yang tersedia. Hasil tersebut belum cukup untuk menyatakan model siap digunakan pada pelanggan sebenarnya.
 
 ---
 
@@ -454,7 +444,7 @@ Hasil notebook merupakan evaluasi eksperimen pada test set, bukan sertifikasi un
 
 ### Kesimpulan sementara
 
-Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlangganan pendek, kontrak *month-to-month*, layanan *fiber optic*, dan metode pembayaran *electronic check*. Tingkat churn menurun pada kelompok dengan masa berlangganan lebih panjang. Pola-pola tersebut memberikan dasar untuk eksplorasi lanjutan, tetapi tidak membuktikan penyebab churn.
+Secara umum, churn lebih banyak ditemukan pada pelanggan dengan masa berlangganan pendek, kontrak *month-to-month*, layanan *fiber optic*, dan pembayaran *electronic check*. Churn juga lebih jarang pada kelompok yang sudah berlangganan lebih lama. Temuan ini bisa menjadi arah untuk analisis berikutnya, tetapi tidak menunjukkan bahwa faktor-faktor tersebut menjadi penyebab churn.
 
 ### Rekomendasi
 
@@ -464,7 +454,7 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 4. Biaya intervensi dan kuota tindakan tidak tersedia pada dataset publik. Sebagai analisis sensitivitas, bandingkan skenario biaya churn yang terlewat sebesar 1, 3, dan 5 kali biaya salah tandai; `MonthlyCharges` hanya proksi kasar nilai pelanggan, bukan nilai retensi aktual.
 5. Ukur Precision dan Recall pada *top-k* 10% dan 20% pelanggan berisiko tertinggi untuk menilai pemeringkatan model.
 6. Bandingkan `class_weight` dengan SMOTE yang diterapkan hanya pada data train, dan uji fitur turunan seperti interaksi `Contract × InternetService`.
-7. Gunakan PR-AUC sekitar 0,65–0,66 sebagai baseline. Dataset hanya satu potret waktu, jadi hasil belum menunjukkan generalisasi ke periode atau perusahaan lain.
+7. Gunakan tabel CV terbaru pada notebook sebagai baseline eksperimen; jangan mengutip angka test lama sebagai hasil independen. Dataset hanya satu potret waktu, jadi hasil belum menunjukkan generalisasi ke periode atau perusahaan lain.
 
 ---
 
@@ -476,12 +466,12 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 | Pembersihan data | Selesai | Nilai tagihan dibersihkan; kategori dinormalisasi |
 | Exploratory Data Analysis | Selesai | Distribusi, perbandingan, korelasi, dan segmen dianalisis |
 | Feature engineering | Selesai | `TenureGroup`, `TotalServices`, target biner |
-| Persiapan train/test | Selesai | Split stratified 80:20, 26 fitur |
-| Eksperimen model dan cross-validation | Selesai | Lima kandidat dibandingkan; PR-AUC CV terbaik sekitar 0,665 |
-| Pemilihan threshold | Selesai untuk eksperimen | Threshold 0,37 dipilih dengan F2 dari prediksi out-of-fold di data train |
-| Evaluasi kandidat pada test set | Selesai | HistGradientBoosting pada threshold 0,37 menghasilkan recall 0,877 dan precision 0,461; threshold dipilih dari prediksi out-of-fold train |
-| Analisis sensitivitas biaya | Rekomendasi notebook | Bandingkan rasio biaya FN:FP 1:1, 3:1, dan 5:1; `MonthlyCharges` sebagai proksi kasar |
-| Evaluasi strategi top-k | Rekomendasi notebook | Hitung Precision dan Recall pada 10% dan 20% probabilitas churn tertinggi di test set |
+| Desain evaluasi utama | Selesai untuk Milestone 1 | Repeated stratified 5-fold CV (3 pengulangan) dengan preprocessing di dalam pipeline |
+| Perbandingan baseline dan kandidat | Selesai untuk Milestone 1 | Tabel mean ± standar deviasi dibuat oleh sel CV notebook; model belum ditetapkan sebagai final |
+| Test set/threshold lama | Eksplorasi saja | Split lama telah digunakan berulang dan tidak dianggap holdout independen |
+| Data/periode holdout baru | Rencana pasca-UTS | Bekukan sebelum eksperimen final untuk mengukur generalisasi |
+| Analisis sensitivitas biaya | Rekomendasi notebook | Bandingkan rasio biaya FN:FP setelah asumsi biaya disetujui; `MonthlyCharges` hanya proksi kasar |
+| Evaluasi strategi top-k | Rekomendasi notebook | Hitung Precision dan Recall pada 10% dan 20% teratas dengan holdout yang belum digunakan |
 | Resampling dan fitur turunan | Rekomendasi notebook | Bandingkan SMOTE pada train dengan `class_weight`; uji interaksi `Contract × InternetService` |
 | Batas generalisasi | Keterbatasan data | Dataset satu potret waktu; belum diuji pada periode/perusahaan lain |
 | Validasi intervensi retensi | Di luar analisis notebook | Biaya, kuota, dan dampak intervensi tidak tersedia pada dataset publik |
@@ -491,22 +481,21 @@ Pada dataset ini, churn lebih sering terlihat pada pelanggan dengan masa berlang
 
 ```mermaid
 flowchart LR
-    A["Cleaning · EDA · rekayasa fitur"] --> B["Bandingkan model<br/>dan cross-validation"]
-    B --> C["Pilih threshold dari<br/>prediksi out-of-fold"]
-    C --> D["Evaluasi kandidat<br/>pada test set"]
-    D --> E["Uji skenario biaya<br/>FN:FP 1:1 · 3:1 · 5:1"]
+    A["Cleaning · EDA · rekayasa fitur"] --> B["Bandingkan model<br/>dengan pipeline CV"]
+    B --> C["Bekukan model dan prosedur<br/>tanpa melihat holdout"]
+    C --> D["Evaluasi pada data/<br/>periode baru"]
+    D --> E["Uji skenario biaya<br/>FN:FP yang disepakati"]
     D --> F["Evaluasi top-k<br/>10% dan 20%"]
     D --> G["Bandingkan SMOTE<br/>dan fitur interaksi"]
-    E --> H["Validasi pada data/<br/>periode baru jika tersedia"]
+    E --> H["Validasi dampak<br/>intervensi retensi"]
     F --> H
     G --> H
-    H --> I["Uji dampak intervensi retensi"]
-    I --> J["Tinjau hasil dan risiko"]
-    J --> K["Pertimbangkan deployment<br/>dan monitoring"]
+    H --> I["Tinjau hasil dan risiko"]
+    I --> J["Pertimbangkan deployment<br/>dan monitoring"]
     classDef done fill:#e7f5e9,stroke:#2e7d32,color:#183b20
     classDef next fill:#fff4e5,stroke:#b26a00,color:#633b00
     class A,B,C,D done
-    class E,F,G,H,I,J,K next
+    class E,F,G,H,I,J next
 ```
 
 ---
