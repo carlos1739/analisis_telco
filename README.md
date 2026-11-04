@@ -35,7 +35,7 @@ Kami memakai dataset **Telco Customer Churn** untuk melihat pola pelanggan yang 
 |---|---|
 | Topik | Churn pelanggan telekomunikasi |
 | Jenis masalah | Klasifikasi biner dan eksplorasi data |
-| Sumber data | IBM Sample Data Sets — Telco Customer Churn |
+| Sumber data | IBM Sample Data Sets - Telco Customer Churn |
 | Isi data | 7.043 pelanggan, 21 kolom |
 | Target | `Churn` (`Yes` / `No`) |
 | Notebook | `notebook/churn_analysis.ipynb` |
@@ -177,7 +177,7 @@ flowchart LR
 | NumPy | Operasi numerik |
 | Matplotlib | Visualisasi |
 | Seaborn | Visualisasi statistik |
-| SciPy | Uji statistik, termasuk Mann–Whitney |
+| SciPy | Uji statistik, termasuk Mann-Whitney |
 | scikit-learn | Pembagian dataset, encoding/scaling, cross-validation, tuning, model klasifikasi, dan evaluasi |
 | Google Colab | Opsi menjalankan notebook di browser |
 
@@ -222,7 +222,7 @@ Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets
 
 ---
 
-## 9. Bagian 1 — Cleaning Data
+## 9. Bagian 1 - Cleaning Data
 
 Sebelum melihat pola churn, kami memeriksa duplikasi, nilai kosong, dan tipe data. Beberapa nilai juga dirapikan agar bisa digunakan dalam analisis.
 
@@ -250,7 +250,7 @@ Sebelum melihat pola churn, kami memeriksa duplikasi, nilai kosong, dan tipe dat
 
 ---
 
-## 10. Bagian 2 — EDA
+## 10. Bagian 2 - EDA
 
 Pada EDA, kami melihat jumlah pelanggan yang churn, lalu membandingkan beberapa karakteristik pelanggan berdasarkan status churn.
 
@@ -267,12 +267,12 @@ Jumlah pelanggan yang churn lebih sedikit daripada yang tidak churn: kira-kira s
 
 | Fitur | Churn | Tidak churn | Pola yang terlihat |
 |---|---:|---:|---|
-| `tenure` — rata-rata | 18,0 bulan | 37,6 bulan | Pelanggan churn cenderung memiliki masa berlangganan lebih pendek |
-| `tenure` — median | 10 bulan | 38 bulan | Distribusi masa berlangganan berbeda |
-| `MonthlyCharges` — rata-rata | 74,4 | 61,3 | Tagihan bulanan pelanggan churn cenderung lebih tinggi |
-| `TotalCharges` — rata-rata | 1.531,8 | 2.549,9 | Nilai lebih rendah sejalan dengan masa berlangganan yang lebih pendek |
+| `tenure` - rata-rata | 18,0 bulan | 37,6 bulan | Pelanggan churn cenderung memiliki masa berlangganan lebih pendek |
+| `tenure` - median | 10 bulan | 38 bulan | Distribusi masa berlangganan berbeda |
+| `MonthlyCharges` - rata-rata | 74,4 | 61,3 | Tagihan bulanan pelanggan churn cenderung lebih tinggi |
+| `TotalCharges` - rata-rata | 1.531,8 | 2.549,9 | Nilai lebih rendah sejalan dengan masa berlangganan yang lebih pendek |
 
-Uji Mann–Whitney pada notebook menunjukkan perbedaan yang signifikan secara statistik untuk ketiga fitur numerik tersebut. Pemeriksaan dengan aturan IQR tidak menandai nilai yang perlu dihapus sebagai outlier.
+Uji Mann-Whitney pada notebook menunjukkan perbedaan yang signifikan secara statistik untuk ketiga fitur numerik tersebut. Pemeriksaan dengan aturan IQR tidak menandai nilai yang perlu dihapus sebagai outlier.
 
 ### 10.3 Asosiasi kategorikal dan segmen
 
@@ -294,10 +294,10 @@ Berdasarkan Cramér’s V, `Contract`, `InternetService`, dan `PaymentMethod` me
 
 | Kelompok `tenure` | Tingkat churn |
 |---|---:|
-| 0–12 bulan | 47,4% |
-| 13–24 bulan | 28,7% |
-| 25–48 bulan | 20,4% |
-| 49–72 bulan | 9,5% |
+| 0-12 bulan | 47,4% |
+| 13-24 bulan | 28,7% |
+| 25-48 bulan | 20,4% |
+| 49-72 bulan | 9,5% |
 
 `tenure` berkorelasi negatif dengan churn (-0,35). `TotalCharges` berkorelasi kuat dengan `tenure` (0,83) dan hampir identik dengan `tenure × MonthlyCharges` (korelasi 1,0). Hubungan ini perlu ditinjau saat pemilihan fitur, terutama untuk model yang sensitif terhadap multikolinearitas.
 
@@ -305,7 +305,7 @@ Berdasarkan Cramér’s V, `Contract`, `InternetService`, dan `PaymentMethod` me
 
 ---
 
-## 11. Bagian 3 — Engineer: Feature Engineering dan Eksperimen Model
+## 11. Bagian 3 - Engineer: Feature Engineering dan Eksperimen Model
 
 Setelah EDA, kami menyiapkan fitur dan target untuk percobaan klasifikasi.
 
@@ -313,7 +313,7 @@ Setelah EDA, kami menyiapkan fitur dan target untuk percobaan klasifikasi.
 
 | Fitur | Cara pembentukan | Keterangan |
 |---|---|---|
-| `TenureGroup` | Mengelompokkan `tenure` menjadi 0–1 tahun, 1–2 tahun, 2–4 tahun, dan lebih dari 4 tahun | Menyediakan kelompok masa berlangganan untuk analisis/model |
+| `TenureGroup` | Mengelompokkan `tenure` menjadi 0-1 tahun, 1-2 tahun, 2-4 tahun, dan lebih dari 4 tahun | Menyediakan kelompok masa berlangganan untuk analisis/model |
 | `TotalServices` | Menghitung jumlah nilai `Yes` di delapan kolom layanan | Menggambarkan jumlah layanan yang digunakan |
 | `Churn` numerik | `Yes` menjadi `1`, `No` menjadi `0` | Variabel target klasifikasi |
 
@@ -352,11 +352,11 @@ Test set dari percobaan terdahulu sudah digunakan berulang kali, jadi hasilnya t
 
 ## 12. Menjalankan Notebook
 
-### Opsi A — Google Colab
+### Opsi A - Google Colab
 
 Buka [notebook di Google Colab](https://colab.research.google.com/github/carlos1739/analisis_telco/blob/master/notebook/churn_analysis.ipynb), lalu jalankan sel dari atas ke bawah. Notebook akan mencoba mengunduh arsip dataset dari repositori jika file belum tersedia, jadi Colab perlu terhubung ke internet.
 
-### Opsi B — Lokal di Windows
+### Opsi B - Lokal di Windows
 
 Gunakan Python 3.11 atau 3.12, lalu jalankan perintah berikut dari root repositori melalui PowerShell:
 
