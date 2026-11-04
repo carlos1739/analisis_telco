@@ -20,7 +20,7 @@
 
 ## 1. Project Overview
 
-Kami menggunakan dataset **Telco Customer Churn** untuk melihat karakteristik pelanggan yang berhenti berlangganan. Analisis ini diharapkan dapat menunjukkan kelompok yang menarik untuk diteliti lebih lanjut dan menjadi langkah awal dalam membandingkan model klasifikasi churn.
+Kami memakai dataset **Telco Customer Churn** untuk melihat pola pelanggan yang berhenti berlangganan. Kami juga mencoba beberapa model klasifikasi sebagai langkah awal; hasilnya belum dimaksudkan untuk dipakai mengambil keputusan pada pelanggan.
 
 ### Tujuan proyek
 
@@ -49,9 +49,9 @@ Kami menggunakan dataset **Telco Customer Churn** untuk melihat karakteristik pe
 
 ## 2. Problem Statement
 
-Pelanggan yang berhenti berlangganan dapat berdampak pada pendapatan perusahaan. Karena itu, perusahaan perlu memahami karakteristik pelanggan yang berhenti dan hal-hal yang mungkin berkaitan dengan keputusan tersebut. Dataset ini memberi kesempatan untuk mulai memeriksa pola-pola itu.
+Pelanggan yang berhenti berlangganan bisa berdampak pada pendapatan perusahaan. Di proyek ini, kami melihat karakteristik apa yang muncul bersama churn dan membandingkan beberapa model awal.
 
-**Pertanyaan utama:** karakteristik demografi, layanan, kontrak, atau akun apa yang tampak berkaitan dengan churn? Kami juga ingin mengetahui bagaimana beberapa model klasifikasi awal bekerja pada dataset ini.
+**Pertanyaan utama:** karakteristik demografi, layanan, kontrak, atau akun mana yang terlihat berkaitan dengan churn? Kami juga membandingkan hasil beberapa model klasifikasi pada dataset ini.
 
 Satu baris mewakili satu pelanggan pada saat data dibuat. Dataset ini tidak mencantumkan urutan waktu maupun jangka waktu prediksi. Jadi, hasil analisis tidak dapat langsung dianggap sebagai prediksi siapa yang akan berhenti berlangganan di masa depan.
 
@@ -90,9 +90,9 @@ Hasil analisis dapat menjadi bahan untuk menentukan pertanyaan lanjutan, tetapi 
 
 ### Cakupan notebook yang sudah dikerjakan
 
-Di notebook, kami melakukan pembersihan data, EDA, pembuatan fitur, lalu mencoba beberapa model classical machine learning. Pada bagian akhir, baseline dan kandidat dibandingkan menggunakan repeated stratified cross-validation. Encoding dan scaling dijalankan di dalam pipeline pada setiap fold.
+Di notebook, kami membersihkan data, melakukan EDA, membuat fitur, lalu mencoba beberapa model classical machine learning. Di bagian akhir, hasil baseline dan model kandidat dibandingkan dengan repeated stratified cross-validation. Encoding dan scaling ada di dalam pipeline, jadi keduanya di-fit ulang pada setiap fold.
 
-Pada percobaan sebelumnya, test set yang sama digunakan beberapa kali untuk membandingkan model dan threshold. Karena itu, hasil tersebut kami anggap sebagai eksplorasi, bukan evaluasi akhir yang independen. Perbandingan terbaru menggunakan repeated stratified CV. Kami belum menguji model pada data dari periode lain atau menilai dampaknya jika dipakai dalam program retensi.
+Di percobaan sebelumnya, kami memakai test set yang sama berulang kali untuk membandingkan model dan threshold. Hasilnya kami simpan sebagai catatan eksplorasi, bukan evaluasi independen. Perbandingan utama ada di repeated stratified CV. Kami belum menguji model pada periode lain atau mengukur dampaknya terhadap program retensi.
 
 ---
 
@@ -319,15 +319,15 @@ Setelah EDA, kami menyiapkan fitur dan target untuk percobaan klasifikasi.
 
 ### 11.2 Fitur awal dan preprocessing
 
-`TenureGroup` merangkum lama berlangganan ke dalam beberapa rentang, sedangkan `TotalServices` menunjukkan jumlah layanan yang digunakan pelanggan. Keduanya dibuat tanpa menggunakan target. Kami juga mempertahankan `gender` dalam perbandingan akhir. Memilih fitur berdasarkan hubungannya dengan target dari seluruh data sebelum validasi bisa membocorkan informasi ke evaluasi.
+`TenureGroup` membagi lama berlangganan ke beberapa rentang, sedangkan `TotalServices` menghitung banyaknya layanan yang digunakan. Keduanya dibuat tanpa melihat target. `gender` juga tetap kami sertakan. Memilih fitur berdasarkan hubungan dengan target sebelum validasi bisa membocorkan informasi ke evaluasi.
 
 Kolom kategori diubah dengan one-hot encoding, sementara fitur numerik distandardisasi. Kedua langkah ini ada di dalam `Pipeline`, sehingga encoder dan scaler hanya belajar dari data training pada masing-masing fold. Kategori yang tidak muncul di data training ditangani dengan `handle_unknown='ignore'`.
 
 ### 11.3 Baseline, kandidat, dan desain evaluasi
 
-Kami membandingkan baseline mayoritas dengan Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting. Parameter model ditentukan sebelum evaluasi. Pada tahap ini, kami belum melakukan tuning hyperparameter atau memilih threshold.
+Kami membandingkan baseline mayoritas dengan Logistic Regression, KNN, Decision Tree, Random Forest, dan HistGradientBoosting. Parameter ditentukan sebelum evaluasi; tuning hyperparameter dan pemilihan threshold belum dilakukan.
 
-Evaluasi menggunakan repeated stratified 5-fold CV dengan tiga pengulangan, sehingga proporsi kelas churn dijaga di setiap fold. Kami mencatat rata-rata dan standar deviasi Accuracy, Precision, Recall, F1, dan PR-AUC. PR-AUC menjadi metrik utama karena jumlah kelas churn lebih sedikit; Recall dan F1 membantu melihat seberapa baik model mengenali pelanggan churn.
+Evaluasi memakai repeated stratified 5-fold CV dengan tiga pengulangan. Proporsi kelas dijaga di setiap fold. Kami mencatat rata-rata dan standar deviasi Accuracy, Precision, Recall, F1, dan PR-AUC. PR-AUC menjadi metrik utama karena jumlah pelanggan churn lebih sedikit; Recall dan F1 melengkapi penilaian untuk kelas churn.
 
 ### 11.4 Status hasil dan batas evaluasi
 
@@ -342,7 +342,7 @@ Tabel berikut berasal dari bagian **Validasi Eksperimen Milestone 1** di noteboo
 | Random Forest | 0,765 ± 0,009 | 0,541 ± 0,013 | 0,763 ± 0,028 | 0,633 ± 0,015 | 0,662 ± 0,019 |
 | HistGradientBoosting | 0,800 ± 0,008 | 0,651 ± 0,019 | 0,529 ± 0,029 | 0,583 ± 0,021 | 0,655 ± 0,019 |
 
-Random Forest memperoleh PR-AUC rata-rata tertinggi, yaitu 0,662. Hasil Logistic Regression hampir sama, yaitu 0,660, sehingga belum cukup alasan untuk menyatakan Random Forest jelas lebih baik. Random Forest memiliki Recall lebih tinggi dan Precision lebih rendah. Decision Tree memperoleh Recall tertinggi, tetapi PR-AUC-nya lebih rendah. Baseline mayoritas menunjukkan lagi bahwa Accuracy 0,735 saja tidak berarti model mampu mengenali churn. Untuk saat ini, kami belum memilih model final.
+Pada CV ini, PR-AUC Random Forest adalah yang tertinggi (0,662), tetapi Logistic Regression dekat di 0,660. Selisihnya kecil, jadi kami belum bisa menyebut Random Forest jelas lebih baik. Recall Random Forest lebih tinggi, sementara Precision-nya lebih rendah. Decision Tree memiliki Recall tertinggi, tetapi PR-AUC lebih rendah. Baseline mayoritas mendapat Accuracy 0,735, tetapi tidak mengenali pelanggan churn. Kami belum memilih model final.
 
 Nilai SD menunjukkan perubahan hasil antar-fold, bukan interval kepercayaan yang independen, karena fold pada repeated CV saling berkaitan. Model masih menggunakan parameter awal; tuning dan pemilihan threshold belum dilakukan.
 
@@ -430,10 +430,10 @@ analisis_telco/
 
 | Urutan | Pekerjaan | Luaran/keputusan |
 |---|---|---|
-| 1 | Jalankan ulang notebook dari awal, tinjau pipeline, dan catat hasil CV beserta versi dependensi | Notebook dan tabel eksperimen yang dapat direproduksi |
-| 2 | Tetapkan kriteria biaya churn terlewat, salah tandai, dan kapasitas retensi bersama dosen/tim | Asumsi evaluasi threshold atau top-k yang disepakati; jangan mengasumsikan biaya yang belum diketahui |
-| 3 | Uji satu perubahan pada satu waktu: `class_weight`/SMOTE di dalam pipeline, lalu fitur interaksi `Contract × InternetService` | Catatan eksperimen yang membandingkan hasil pada CV tanpa menyentuh holdout |
-| 4 | Jika tersedia, kumpulkan data periode berikutnya; bekukan sebagai holdout sebelum pemilihan model dan threshold | Evaluasi generalisasi pada data yang belum digunakan |
+| 1 | Jalankan notebook dari awal sampai akhir dan cocokkan hasil CV yang muncul dengan tabel | Notebook dan hasil CV yang sudah diperiksa ulang |
+| 2 | Sebelum mencoba threshold atau top-k, sepakati dulu dampak churn yang terlewat dan jumlah pelanggan yang bisa ditangani tim retensi | Dasar untuk memilih threshold atau top-k; biaya yang belum diketahui tidak dianggap sebagai fakta |
+| 3 | Coba satu perubahan setiap kali: bandingkan `class_weight` dengan SMOTE di dalam pipeline, lalu uji fitur gabungan `Contract` dan `InternetService` | Hasil yang bisa dibandingkan dengan CV yang sama, tanpa memakai holdout |
+| 4 | Jika ada data dari periode berikutnya, sisihkan sebelum memilih model dan threshold, lalu gunakan untuk evaluasi akhir | Gambaran apakah hasil model juga berlaku pada data dari periode berbeda |
 
 Hasil CV ini masih merupakan gambaran awal dari dataset yang tersedia. Hasil tersebut belum cukup untuk menyatakan model siap digunakan pada pelanggan sebenarnya.
 
