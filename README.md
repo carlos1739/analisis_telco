@@ -372,6 +372,12 @@ Di JupyterLab, buka `notebook/churn_analysis.ipynb` dan jalankan sel dari atas k
 
 Jika PowerShell menolak aktivasi virtual environment, jalankan sesi PowerShell dengan kebijakan yang mengizinkan skrip aktivasi untuk pengguna atau gunakan interpreter `.venv\Scripts\python.exe` secara langsung.
 
+### Pemeriksaan otomatis saat push
+
+GitHub Actions menjalankan notebook dari awal setiap ada push atau pull request. Prosesnya memasang paket dari `requirement.txt`, menyiapkan dataset dari arsip di folder `data/`, lalu menjalankan semua sel notebook. Jika ada sel yang gagal, pemeriksaan akan berstatus gagal. Hasil notebook eksekusi disimpan di runner dan tidak menimpa file notebook di repositori.
+
+Workflow ini menjalankan pemeriksaan CI, bukan deployment. GitHub menjalankannya setelah push; agar hasilnya wajib lolos sebelum perubahan digabungkan, aktifkan branch protection dan jadikan pemeriksaan **Run churn analysis** sebagai required status check.
+
 ### Lokasi dataset yang diharapkan notebook
 
 Notebook menggunakan folder kerja `datasets/`. Jika menjalankan tanpa mengunduh arsip, siapkan file seperti berikut:
@@ -393,6 +399,9 @@ analisis_telco/
 │   └── Churn_Customer_telco.zip
 ├── notebook/
 │   └── churn_analysis.ipynb
+├── .github/
+│   └── workflows/
+│       └── notebook-analysis.yml
 ├── requirement.txt
 └── README.md
 ```

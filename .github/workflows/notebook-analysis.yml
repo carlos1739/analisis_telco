@@ -1,0 +1,49 @@
+name: Notebook analysis
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: notebook-analysis-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  run-notebook:
+    name: Run churn analysis
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirement.txt
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirement.txt
+
+      - name: Prepare dataset
+        run: |
+          mkdir -p datasets
+          cp data/Churn_Customer_telco.zip datasets/Churn_Customer_telco.zip
+
+      - name: Execute notebook
+        run: |
+          jupyter nbconvert \
+            --to notebook \
+            --execute notebook/churn_analysis.ipynb \
+            --output churn_analysis.executed.ipynb \
+            --output-dir "$RUNNER_TEMP" \
+            --ExecutePreprocessor.timeout=1800
