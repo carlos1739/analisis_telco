@@ -35,7 +35,7 @@ Kami memakai dataset **Telco Customer Churn** untuk melihat pola pelanggan yang 
 |---|---|
 | Topik | Churn pelanggan telekomunikasi |
 | Jenis masalah | Klasifikasi biner dan eksplorasi data |
-| Sumber data | IBM Sample Data Sets - Telco Customer Churn |
+| Sumber data | Kaggle - [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) |
 | Isi data | 7.043 pelanggan, 21 kolom |
 | Target | `Churn` (`Yes` / `No`) |
 | Notebook | `notebook/churn_analysis.ipynb` |
@@ -189,7 +189,7 @@ Dependensi untuk menjalankan notebook dicatat di `requirement.txt`.
 
 ### 8.1 Sumber dan ukuran data
 
-Dataset yang digunakan adalah **Telco Customer Churn** dari IBM Sample Data Sets. Arsip yang dipakai dalam proyek tersedia di [repositori proyek](https://github.com/carlos1739/analisis_telco/blob/master/data/Churn_Customer_telco.zip). Unit observasinya adalah satu baris per pelanggan pada satu snapshot; dataset tidak menyediakan deret waktu atau horizon prediksi.
+Dataset yang digunakan adalah **Telco Customer Churn** dari [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn). Arsip dataset yang digunakan dalam proyek tersedia di [repositori proyek](https://github.com/carlos1739/analisis_telco/blob/master/data/Churn_Customer_telco.zip). Unit observasinya adalah satu baris per pelanggan pada satu snapshot; dataset tidak menyediakan deret waktu atau horizon prediksi.
 
 | Properti | Nilai |
 |---|---|
