@@ -33,6 +33,9 @@ Kami memakai dataset **Telco Customer Churn** untuk melihat pola pelanggan yang 
 
 | Bagian | Keterangan |
 |---|---|
+| Project ID | A06 |
+| Nama kelompok | Telco |
+| Anggota | CARLOS LEONARDO J. DONGORAN (231111859); YOHANES CORNELIUS WILLFREDI SIMANJUNTAK (231111676); Radhit Maulana (231110680) |
 | Topik | Churn pelanggan telekomunikasi |
 | Jenis masalah | Klasifikasi biner dan eksplorasi data |
 | Sumber data | Kaggle - [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) |
