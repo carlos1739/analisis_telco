@@ -39,11 +39,20 @@ jobs:
           mkdir -p datasets
           cp data/Churn_Customer_telco.zip datasets/Churn_Customer_telco.zip
 
-      - name: Execute notebook
+      - name: Execute Milestone 1 notebook
         run: |
           jupyter nbconvert \
             --to notebook \
-            --execute notebook/churn_analysis.ipynb \
-            --output churn_analysis.executed.ipynb \
+            --execute notebook/milestone1_churn.ipynb \
+            --output milestone1_churn.executed.ipynb \
+            --output-dir "$RUNNER_TEMP" \
+            --ExecutePreprocessor.timeout=1800
+
+      - name: Execute Milestone 2 notebook
+        run: |
+          jupyter nbconvert \
+            --to notebook \
+            --execute notebook/milestone2_churn.ipynb \
+            --output milestone2_churn.executed.ipynb \
             --output-dir "$RUNNER_TEMP" \
             --ExecutePreprocessor.timeout=1800
